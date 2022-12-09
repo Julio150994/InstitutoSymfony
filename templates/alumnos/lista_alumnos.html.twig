@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Antiguos alumnos de Salesianos{% endblock %}
+
+{% block bootstrap %}
+{# CSS Bootstrap 5 #}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+{#  FontAwesome 6.2.0 icons #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+{% endblock %}
+
+{% block stylesheets %} {% endblock %}
+
+{% block alumnos_css %}
+{# Archivo CSS en Symfony desde carpeta public #}
+<link rel="stylesheet" href="{{ asset('css/alumnos.css') }}">
+{% endblock %}
+
+
+
+
+{% block alumnos %}
+{# Para volver a nuestro menú de inicio con un navbar #}
+<nav class="navbar navbar-expand-lg bg-light rounded">
+    <div class="container-fluid">
+        <a href="{{ path('home') }}" class="btn btn-secondary text-white">
+            <span class="fas fa-solid fa-arrow-left"></span>
+            <span>Volver al menú de inicio</span>
+        </a>
+    </div>
+</nav>
+
+{# Construimos la tabla alumnos en base a añadir datos #}
+<div class="rounded mt-xs-2 mt-lg-5 mt-md-5 p-xs-2 p-lg-5 p-md-5
+    pb-xs-2 pb-lg-3 pb-md-3 bg-secondary text-white">
+
+	<h3 class="text-center pt-xs-2 pt-lg-4 pt-md-4" style="font-family: helvetica;">
+        {{ list_students }}
+    </h3>
+
+    {# Sintáxis de mensaje flash en Symfony al añadir trabajador #}
+    {% for aniadir in app.flashes('aniadir') %}
+        <div class="alert alert-success text-center">
+            {{ aniadir }}
+        </div>
+    {% endfor %}
+
+    {# Sintáxis de mensaje flash en Symfony al editar trabajador #}
+    {% for editar in app.flashes('editar') %}
+        <div class="alert alert-primary text-center">
+            {{ editar}}
+        </div>
+    {% endfor %}
+
+
+    {# Sintáxis de mensaje flash en Symfony al eliminar trabajador #}
+    {% for eliminar in app.flashes('eliminar') %}
+        <div class="alert alert-danger text-center">
+            {{ eliminar }}
+        </div>
+    {% endfor %}
+
+    <div class="container-fluid mt-xs-2 mt-lg-5 mt-md-5">
+        {# Sintáxis de como crear un enlace #}
+		<a href="{{ path('alumno_create') }}" class="btn btn-sm btn-verde">
+			<span class="fas fa-solid fa-plus text-white"></span>
+			<span>Añadir alumno</span>
+		</a>
+	</div>
+    
+    {% if alumnos is empty %}
+        <div class="container-fluid alert alert-warning mt-xs-2 mt-lg-5 mt-md-5 text-center">
+            No se han encontrado antiguos alumnos en Salesianos
+	    </div>
+    {% else %}
+        <div class="container-xl mt-xs-3 mt-lg-5 mt-md-5 bg-white mb-xs-3 mb-lg-5 mb-md-5
+            p-xs-3 p-lg-4 p-md-4 m-xs-1 m-lg-2 m-md-2 rounded">
+            <table class="table table-bordered text-center">
+                <thead class="table table-dark">
+                    <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Edad</th>
+                    <th scope="col">Foto</th>
+                    <th scope="col">Precio matrícula</th>
+                    <th scope="col" colspan="3">Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark bg-white">
+                    {% for alumno in alumnos %}
+                    <tr>
+                        <td>{{ alumno.nombre }}</td>
+                        <td>{{ alumno.apellidos }}</td>
+                        <td>{{ alumno.edad }}</td>
+                        <td>
+                            <img src="{{ asset(alumno.foto) }}" id="imagen" width="160px" height="100px"/>
+                        </td>
+                        <td>{{ alumno.preciomatricula }} €</td>
+                        <td>
+                            <a href="{{ path('datos_alumno', {'id': alumno.id}) }}" class="btn btn-warning btn-sm">
+                                <span class="fas fa-eye text-white"></span>
+                                <span class="text-white">Ver datos</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path('alumno_update', {'id': alumno.id}) }}" class="btn btn-primary btn-sm">
+                                <span class="fas fa-pencil text-white"></span>
+                                <span class="text-white">Editar</span>
+                            </a>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="return eliminarAlumno({{ alumno.id }})">
+                                <span class="fas fa-solid fa-trash-can"></span>
+                                <span>Eliminar</span>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-light rounded p-xs-2 p-lg-3 p-md-3 m-xs-1 m-lg-2 m-md-2">
+            <a href="{{ path('lista_alumnos_pdf') }}" class="btn btn-info text-white">
+                <span class="fas fa-solid fa-file-pdf"></span>
+                <span>Lista de alumnos</span>
+            </a>
+
+            <a href="{{ path('lista_alumnos_excel') }}" class="btn btn-success text-white">
+                <span class="fas fa-solid fa-file-excel"></span>
+                <span>Exportar alumnos a Excel</span>
+            </a>
+        </div>
+    {% endif %}    
+</div>
+{% endblock %}
+
+
+{% block alumnos_js %}
+
+{# Mensaje de confirmación de JS con SweetAlert 2 antes de eliminar trabajador #}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript" src="{{ asset('js/alumnos.js') }}"></script>
+{% endblock %}

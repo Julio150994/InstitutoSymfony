@@ -1,0 +1,13 @@
+.bg-violeta {
+    background-color: blueviolet;
+    color: #FFF;
+}
+.btn-verde {
+    background-color: #20d300;
+    color: #FFF;
+}
+
+.imagen {
+    width: 150px !important;
+    height: 150px !important;
+}

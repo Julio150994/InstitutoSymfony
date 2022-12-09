@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Aplicación Symfony 6 Instituto {% endblock %}
+
+{# Establecemos los estilos Bootstrap #}
+{% block bootstrap %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+
+{% block body %}
+<style>
+    body {background-color: #4618AC; color: #FFF;}
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #B5B5B5; padding: 2px 6px; margin-top: 10px; }
+
+    .text-color {color: #FFF;}
+</style>
+
+{# Página web tipo responsive en Symfony #}
+<div class="example-wrapper ml-xs-3 ml-lg-5 ml-md-5 mt-xs-3 mt-lg-5 mt-md-5
+    p-xs-2 p-lg-3 p-md-3">
+    {# Página principal de nuestra aplicación (no la página por defecto) #}
+    
+    <h1 class="text-white pt-xs-3 pt-lg-5 pt-md-5">Hola, queridos alumnos de Salesianos de DAM</h1>
+    
+    <span class="text-white">Esta es nuestra aplicación de Symfony, ¡¡bienvenidos!! :)</span>
+
+    {# Para acceder a la tabla de alumnos #}
+
+    <div class="bg-light rounded p-xs-2 p-lg-3 p-md-3 mt-xs-4 mt-lg-5 mt-md-5">
+        <a href="{{ path('alumnos') }}" style="text-decoration: none; color: #FFF;" class="btn btn-info text-color">
+            <span class="fas fa-solid fa-users"></span>
+            <span>Mostrar lista de alumnos</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
